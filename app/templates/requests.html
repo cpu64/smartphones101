@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Credit Requests</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+</head>
+<body>
+
+    {% include 'includes/navbar.html' %}
+
+    <main style="padding: 20px;">
+        <div style="max-width: 800px; margin: 40px auto; text-align: center;">
+
+            <h1>Credit Requests</h1>
+
+            {% include 'includes/flash_messages.html' %}
+
+            <!-- ===================== REQUEST LIST ===================== -->
+            <div style="margin-top: 30px; text-align: left;">
+                {% if data.requests and data.requests|length > 0 %}
+                    {% for r in data.requests %}
+                        <div style="
+                            background-color: var(--secondary-color);
+                            padding: 16px;
+                            border-radius: var(--border-radius);
+                            margin-bottom: 16px;
+                        ">
+
+                            <div style="margin-bottom: 8px;">
+                                <strong>Amount:</strong> {{ r.amount }} credits<br>
+                                <strong>Date:</strong> {{ r.created_at.strftime('%Y-%m-%d %H:%M') }}
+                            </div>
+
+                            {% if data.role == 'admin' %}
+                                <strong>User ID:</strong> {{ r.username }}<br><br>
+
+                                <!-- Approve -->
+                                <form action="{{ url_for('requests.requests') }}" method="POST" style="display:inline;">
+                                    <input type="hidden" name="action" value="approve">
+                                    <input type="hidden" name="request_id" value="{{ r.id }}">
+                                    <input type="hidden" name="amount" value="{{ r.amount }}">
+                                    <input type="hidden" name="username" value="{{ r.username }}">
+                                    <button class="action-button" type="submit">Approve</button>
+                                </form>
+
+                                <!-- Deny -->
+                                <form action="{{ url_for('requests.requests') }}" method="POST" style="display:inline;">
+                                    <input type="hidden" name="action" value="deny">
+                                    <input type="hidden" name="request_id" value="{{ r.id }}">
+                                    <button class="action-button cancel-button" type="submit">Deny</button>
+                                </form>
+
+                            {% else %}
+                                <!-- Users cannot approve/deny -->
+                                <p style="color: #ccc; font-size: 14px; margin-top: 10px;">
+                                    Status: Pending admin approval
+                                </p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No credit requests yet.</p>
+                {% endif %}
+            </div>
+
+            <!-- ===================== USER CREATE REQUEST ===================== -->
+            {% if data.role == 'user' %}
+                <hr style="margin: 40px 0; border: 1px solid var(--input-border);">
+                <h2>Request Credits</h2>
+
+                <form action="{{ url_for('requests.requests') }}" method="POST"
+                      style="display: flex; flex-direction: column; gap: 12px; align-items: center;">
+
+                    <input type="hidden" name="action" value="create">
+
+                    <input class="text-input" type="number" name="amount"
+                           placeholder="Enter amount..."
+                           min="1"
+                           required
+                           style="width: 100%; max-width: 300px;">
+
+                    <button class="action-button" type="submit" style="max-width: 200px;">
+                        Submit Request
+                    </button>
+                </form>
+            {% endif %}
+
+        </div>
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!-- templates/register.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.svg') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+</head>
+<body>
+    <div class="login-container">
+        <h1>Register</h1>
+
+        {% include 'includes/flash_messages.html' %}
+
+        <form method="POST" action="{{ url_for('register.register') }}">
+            <label for="username">Username</label>
+            <input class="text-input" type="text" id="username" name="username" required>
+
+            <label for="password">Password</label>
+            <input class="text-input" type="password" id="password" name="password" required>
+
+            <button style="margin: 10px 80px;" class="action-button" type="submit">Create account</button>
+        </form>
+
+        <p>Already have an account? <a href="{{ url_for('login.login') }}">Log in</a></p>
+    </div>
+</body>
+</html>

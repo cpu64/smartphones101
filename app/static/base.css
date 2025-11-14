@@ -1,0 +1,185 @@
+/* static/base.css */
+
+:root {
+    --primary-color: #1e145e;
+    --secondary-color: #160f46;
+    --accent-color: #007bff;
+    --font-primary-color: #ffffff;
+    --border-radius: 10px;
+    --input-bg: #2a1f8a;
+    --input-border: #3b2cb0;
+    --input-focus: #5a45ff;
+    --transition-speed: 0.3s;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    color: var(--font-primary-color);
+    background-color: var(--primary-color);
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    align-items: center;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.flash {
+    padding: 10px 15px;
+    margin: 16px 0;
+    border-radius: var(--border-radius);;
+    font-weight: bold;
+    font-size: 15px;
+    text-align: left;
+    max-width: 400px;
+}
+
+.flash.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.flash.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.flash.info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+.css-toggle-content {
+    display: none;
+    animation: fadeIn var(--transition-speed) ease;
+}
+.css-toggle-switch:checked ~ .css-toggle-content { display: block; }
+.css-toggle-switch { display: none; }
+.css-toggle-switch + label {
+    cursor: pointer;
+    display: inline-block;
+    color: #ddd;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.action-button {
+    padding: 11px 16px 9px 16px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    background-color: #007bff;
+    color: var(--font-primary-color);
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 16px;
+    font-family: inherit;
+    line-height: 1;
+    font-weight: 400;
+    transition: background-color var(--transition-speed) ease, transform 0.1s ease;
+    margin: 8px 8px 8px 0px;
+}
+
+.action-button:hover {
+    background-color: #0056b3;
+}
+
+.action-button:active {
+    transform: scale(0.98);
+}
+
+.cancel-button {
+    background-color: red;
+}
+
+.cancel-button:hover {
+    background-color: #b30000;
+}
+
+.cancel-button:active {
+    transform: scale(0.98);
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+    z-index: 9999;
+}
+
+#popup-toggle:checked + .popup {
+    display: flex;
+}
+
+.popup-content {
+    background-color: var(--primary-color);
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 90%;
+    text-align: center;
+    z-index: 10000;
+}
+
+.popup label {
+    cursor: pointer;
+}
+
+.edit-icon {
+    display: inline-block;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+}
+
+.show-icon {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+}
+
+.text-input {
+    padding: 10px 12px;
+    border: 2px solid var(--input-border);
+    border-radius: var(--border-radius);
+    background-color: var(--input-bg);
+    color: var(--font-primary-color);
+    font-size: 15px;
+    transition: all var(--transition-speed) ease;
+}
+
+.text-input::placeholder {
+    color: #bdbdbd;
+    font-style: italic;
+}
+
+.text-input:focus {
+    border-color: var(--input-focus);
+    outline: none;
+    background-color: #fffcc8;
+    color: #000000;
+    box-shadow: 0 0 6px rgba(90, 69, 255, 0.4);
+}

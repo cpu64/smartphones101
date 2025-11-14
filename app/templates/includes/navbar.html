@@ -1,0 +1,60 @@
+<!-- templates/includes/navbar.html -->
+<nav style="
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--secondary-color);
+    padding: 12px 20px;
+    border-bottom: 2px solid var(--input-border);
+    position: relative;
+    flex-wrap: wrap;
+">
+    {% set role = session.get('role', 'guest') or data.role or 'guest' %}
+
+    <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: center;">
+        {% if role == 'admin' %}
+            <a href="{{ url_for('faq.faq') }}">FAQ</a>
+            <a href="{{ url_for('reviews.reviews') }}">Reviews</a>
+            <a href="{{ url_for('requests.requests') }}">Requests</a>
+            <a href="{{ url_for('timetables.timetables') }}">Timetables</a>
+            <a href="{{ url_for('register_consultant.register_consultant') }}">Register Consultant</a>
+        {% elif role == 'user' %}
+            <a href="{{ url_for('faq.faq') }}">FAQ</a>
+            <a href="{{ url_for('reviews.reviews') }}">Reviews</a>
+            <a href="{{ url_for('requests.requests') }}">Requests</a>
+            <a href="{{ url_for('timetables.timetables') }}">Timetables</a>
+            <a href="{{ url_for('chat.chat') }}">Chat</a>
+        {% elif role == 'consultant' %}
+            <a href="{{ url_for('faq.faq') }}">FAQ</a>
+            <a href="{{ url_for('reviews.reviews') }}">Reviews</a>
+            <a href="{{ url_for('timetables.timetables') }}">Timetables</a>
+            <a href="{{ url_for('chat.chat') }}">Chat</a>
+        {% else %}
+            <a href="{{ url_for('login.login') }}">Login</a>
+            <a href="{{ url_for('register.register') }}">Register</a>
+            <a href="{{ url_for('faq.faq') }}">FAQ</a>
+            <a href="{{ url_for('reviews.reviews') }}">Reviews</a>
+            <a href="{{ url_for('timetables.timetables') }}">Timetables</a>
+        {% endif %}
+    </div>
+
+    {% if role in [ 'admin', 'consultant', 'user'] %}
+        <form action="{{ url_for('logout.logout') }}" method="POST" style="position: absolute; right: 20px; margin: 0;">
+            <button type="submit" class="action-button cancel-button">Logout</button> </button>
+        </form>
+    {% endif %}
+</nav>
+
+<style>
+    nav a {
+        color: var(--font-primary-color);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 16px;
+        transition: color var(--transition-speed) ease;
+    }
+    nav a:hover {
+        color: var(--accent-color);
+    }
+</style>

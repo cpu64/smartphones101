@@ -1,0 +1,62 @@
+<!-- templates/faq.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>FAQs</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+</head>
+<body>
+
+    {% include 'includes/navbar.html' %}
+
+    <main style="padding: 20px;">
+    <div style="max-width: 800px; margin: 40px auto; text-align: center;">
+        <h1>Frequently Asked Questions</h1>
+
+        {% include 'includes/flash_messages.html' %}
+
+        <!-- FAQ list -->
+        <div style="margin-top: 30px; text-align: left;">
+            {% if data.faqs %}
+                {% for faq in data.faqs %}
+                    <div style="background-color: var(--secondary-color); padding: 16px; border-radius: var(--border-radius); margin-bottom: 16px;">
+                        <!-- Toggle switch -->
+                        <input type="checkbox" class="css-toggle-switch" id="faq-{{ faq.id }}">
+                        <label for="faq-{{ faq.id }}" style="font-weight: bold; font-size: 17px; display: block;">
+                            {{ faq.question }}
+                        </label>
+
+                        <div class="css-toggle-content" style="margin-top: 10px;">
+                            <p>{{ faq.answer }}</p>
+                            <small>Created: {{ faq.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+
+                            {% if data.role == 'admin' %}
+                                <form action="{{ url_for('faq.faq') }}" method="POST" style="margin-top: 10px;">
+                                    <input type="hidden" name="delete_id" value="{{ faq.id }}">
+                                    <button type="submit" class="action-button cancel-button">Delete</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No FAQs available yet.</p>
+            {% endif %}
+        </div>
+
+        {% if data.role == 'admin' %}
+        <!-- Admin Add FAQ form -->
+        <hr style="margin: 40px 0; border: 1px solid var(--input-border);">
+        <h2>Add New FAQ</h2>
+        <form action="{{ url_for('faq.faq') }}" method="POST" style="display: flex; flex-direction: column; gap: 12px; align-items: center;">
+            <input type="text" name="question" placeholder="Enter question..." required class="text-input" style="width: 100%; max-width: 600px;">
+            <textarea name="answer" placeholder="Enter answer..." required class="text-input" style="width: 100%; max-width: 600px; min-height: 100px;"></textarea>
+            <button type="submit" class="action-button">Add FAQ</button>
+        </form>
+        {% endif %}
+    </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!-- templates/timetables.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Consultant Timetables</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+</head>
+<body>
+
+    {% include 'includes/navbar.html' %}
+
+    <main style="padding: 20px;">
+    <div style="max-width: 1000px; margin: 40px auto; text-align: center;">
+        <h1>Consultant Timetables</h1>
+<!--         <h2>{{ data["timeslot"] }}</h2> -->
+        {% include 'includes/flash_messages.html' %}
+
+        {% if data.consultants %}
+
+            {% set current_user_id = session.get('user_id') %}
+            {% set current_username = session.get('username') %}
+            {% set day_labels = ['Today', 'Tomorrow', 'The Day After Tomorrow'] %}
+
+            {# ------- FIXED: define macro once ------- #}
+            {% macro hour_label(hour) %}
+                {% if hour <= 4 %}
+                    {{ hour + 7 }}:00–{{ hour + 8 }}:00
+                {% else %}
+                    {{ hour + 8 }}:00–{{ hour + 9 }}:00
+                {% endif %}
+            {% endmacro %}
+
+            {% for c in data.consultants %}
+            <div style="background-color: var(--secondary-color); padding: 20px; border-radius: var(--border-radius); margin-bottom: 30px;">
+                <h2>{{ c.username }}</h2>
+
+                <!-- 3 days, 8 hours each -->
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
+
+                    {% for day in range(1, 4) %}
+
+                        <!-- Day Label -->
+                        <h3 style="text-align:left; margin:0; padding-left:5px;">
+                            {{ day_labels[day-1] }}
+                        </h3>
+
+                        <div style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px;">
+                            {% for hour in range(1, 9) %}
+                                {% set slot = c.timetable[day-1][hour-1] %}
+
+                                {% if not current_username or session.get('role') != 'user' %}
+
+                                    <form action="{{ url_for('timetables.timetables') }}" method="POST" style="margin:0;">
+                                        <input type="hidden" name="consultant_id" value="{{ c.id }}">
+                                        <input type="hidden" name="day" value="{{ day }}">
+                                        <input type="hidden" name="hour" value="{{ hour }}">
+                                        <input type="hidden" name="username" value="">
+                                        <input type="hidden" name="action" value="reserve">
+
+                                        {% if not slot %}
+                                            <button type="submit" class="action-button" style="width:100%; padding:10px 0;">
+                                                {{ hour_label(hour) }}<br>Free
+                                            </button>
+                                        {% else %}
+                                            <button class="action-button" disabled style="width:100%; padding:10px 0; opacity:0.6; cursor:not-allowed;">
+                                                {{ hour_label(hour) }}<br>Reserved
+                                            </button>
+                                        {% endif %}
+                                    </form>
+
+                                {% else %}
+
+                                    {% if not slot %}
+                                        <!-- Free slot -->
+                                        <form action="{{ url_for('timetables.timetables') }}" method="POST" style="margin:0;">
+                                            <input type="hidden" name="consultant_id" value="{{ c.id }}">
+                                            <input type="hidden" name="day" value="{{ day }}">
+                                            <input type="hidden" name="hour" value="{{ hour }}">
+                                            <input type="hidden" name="username" value="{{ current_username }}">
+                                            <input type="hidden" name="action" value="reserve">
+
+                                            <button type="submit" class="action-button" style="width:100%; padding:10px 0;">
+                                                {{ hour_label(hour) }}<br>Free
+                                            </button>
+                                        </form>
+
+                                    {% elif slot == current_user_id %}
+                                        <!-- Reserved by the current user -->
+                                        <form action="{{ url_for('timetables.timetables') }}" method="POST" style="margin:0;">
+                                            <input type="hidden" name="consultant_id" value="{{ c.id }}">
+                                            <input type="hidden" name="day" value="{{ day }}">
+                                            <input type="hidden" name="hour" value="{{ hour }}">
+                                            <input type="hidden" name="username" value="{{ current_username }}">
+                                            <input type="hidden" name="action" value="cancel">
+
+                                            <button type="submit" class="action-button cancel-button" style="width:100%; padding:10px 0;">
+                                                {{ hour_label(hour) }}<br>Cancel
+                                            </button>
+                                        </form>
+
+                                    {% else %}
+                                        <!-- Reserved by someone else -->
+                                        <button class="action-button" disabled style="width:100%; padding:10px 0; opacity:0.6; cursor:not-allowed;">
+                                            {{ hour_label(hour) }}<br>Reserved
+                                        </button>
+                                    {% endif %}
+
+                                {% endif %}
+
+                            {% endfor %}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+            </div>
+            {% endfor %}
+
+        {% else %}
+            <p>No consultants found.</p>
+        {% endif %}
+
+    </div>
+    </main>
+</body>
+</html>

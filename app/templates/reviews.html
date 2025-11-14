@@ -1,0 +1,108 @@
+<!-- templates/reviews.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Reviews</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+</head>
+<body>
+
+    {% include 'includes/navbar.html' %}
+
+    <main style="padding: 20px;">
+        <div style="max-width: 900px; margin: 40px auto;">
+            <h1 style="text-align: center;">Consultant Reviews</h1>
+
+            {% include 'includes/flash_messages.html' %}
+
+<!-- Group reviews by consultant -->
+{% set grouped = {} %}
+{% for r in data.reviews %}
+    {% if r.consultant_name not in grouped %}
+        {% set _ = grouped.update({ r.consultant_name: [] }) %}
+    {% endif %}
+    {% set _ = grouped[r.consultant_name].append(r) %}
+{% endfor %}
+
+<!-- Helper: Map consultant -> average rating -->
+{% set avg_map = {} %}
+{% for c in data.popular_consultants %}
+    {% set _ = avg_map.update({ c.consultant_name: c.average_rating }) %}
+{% endfor %}
+
+<!-- Show grouped reviews -->
+{% if grouped|length > 0 %}
+    {% for consultant, reviews in grouped.items() %}
+
+        {% set avg = avg_map.get(consultant, None) %}
+
+        <div style="
+            background: var(--secondary-color);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+        ">
+            <h2 style="margin-bottom: 10px;">
+                👤 {{ consultant }}
+
+                {% if avg %}
+                    <span style="color: gold; font-size: 0.9rem;">
+                        ★ {{ avg }}
+                    </span>
+                {% endif %}
+            </h2>
+
+            <hr style="margin-bottom: 20px;">
+
+            {% for review in reviews %}
+                <div style="
+                    background-color: rgba(255,255,255,0.04);
+                    padding: 16px;
+                    border-radius: var(--border-radius);
+                    margin-bottom: 16px;
+                ">
+                    <!-- Rating -->
+                    <div style="margin-bottom: 8px;">
+                        {% for i in range(1, 6) %}
+                            {% if i <= review.rating %}
+                                <span style="color: gold;">★</span>
+                            {% else %}
+                                <span style="color: #555;">☆</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    <!-- Review Text -->
+                    {% if review.review_text %}
+                        <p>{{ review.review_text }}</p>
+                    {% else %}
+                        <p style="font-style: italic; color: #bbb;">(No review text provided)</p>
+                    {% endif %}
+
+                    <!-- Reviewer & Timestamp -->
+                    <small>
+                        From: <strong>{{ review.user_name }}</strong><br>
+                        {{ review.created_at.strftime('%Y-%m-%d %H:%M') }}
+                    </small>
+                </div>
+            {% endfor %}
+        </div>
+
+    {% endfor %}
+{% else %}
+    <p style="text-align: center;">No reviews available yet.</p>
+{% endif %}
+
+
+            {% if data.role == 'user' %}
+                <hr style="margin: 40px 0; border: 1px solid var(--input-border);">
+                <p style="color: #aaa; text-align: center; font-style: italic;">
+                    You can submit reviews after consulting with a consultant.
+                </p>
+            {% endif %}
+        </div>
+    </main>
+</body>
+</html>

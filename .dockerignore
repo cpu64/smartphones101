@@ -1,0 +1,11 @@
+**/.dockerignore
+**/Dockerfile*
+**/README.md
+**/.gitignore
+**/.git/
+**/__pycache__/
+**/.venv/
+**/.vscode/
+./db/init/
+./db/data/
+./db/logs/

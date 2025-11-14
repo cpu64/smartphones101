@@ -1,0 +1,119 @@
+<!-- templates/faq.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Write a Review</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.svg') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+
+    <style>
+        .review-container {
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 25px;
+            background: var(--bg-color);
+            border: 1px solid var(--input-border);
+            border-radius: var(--border-radius);
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 12px;
+            margin-top: 5px;
+            border: 1px solid var(--input-border);
+            border-radius: var(--border-radius);
+            resize: vertical;
+            font-size: 15px;
+        }
+
+        select {
+            width: 150px;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid var(--input-border);
+            border-radius: var(--border-radius);
+        }
+
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .submit-btn {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .cancel-btn {
+            background: #777;
+            color: white;
+        }
+
+        .submit-btn:hover,
+        .cancel-btn:hover {
+            opacity: 0.85;
+        }
+    </style>
+</head>
+
+<body>
+
+{% include 'includes/navbar.html' %}
+
+<div class="review-container">
+
+    <h2>Leave a Review for {{ data.consultant.username }}</h2>
+
+    {% include 'includes/flash_messages.html' %}
+
+    <form method="POST" action="{{ url_for('reviews.create_review_post') }}">
+        <input type="hidden" name="consultant_id" value="{{ data.consultant.id }}">
+
+        <label for="rating">Rating</label><br>
+        <select name="rating" id="rating" required>
+            <option value="" disabled selected>Select rating</option>
+            <option value="1">1 ⭐</option>
+            <option value="2">2 ⭐</option>
+            <option value="3">3 ⭐</option>
+            <option value="4">4 ⭐</option>
+            <option value="5">5 ⭐</option>
+        </select>
+
+        <br><br>
+
+        <label for="review_text">Your Review</label>
+        <textarea id="review_text" name="review_text" placeholder="Write your thoughts..." required></textarea>
+
+        <div class="buttons">
+            <button class="submit-btn" type="submit">Submit Review</button>
+
+            <a href="{{ url_for('reviews.reviews') }}">
+                <button type="button" class="cancel-btn">Cancel</button>
+            </a>
+        </div>
+    </form>
+
+</div>
+
+</body>
+</html>
