@@ -34,7 +34,7 @@
                             </div>
 
                             {% if data.role == 'admin' %}
-                                <strong>User ID:</strong> {{ r.username }}<br><br>
+                                <strong>Username:</strong> {{ r.username }}<br><br>
 
                                 <!-- Approve -->
                                 <form action="{{ url_for('requests.requests') }}" method="POST" style="display:inline;">
