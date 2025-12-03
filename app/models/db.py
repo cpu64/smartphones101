@@ -115,7 +115,7 @@ def init_db():
         cur.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-            username VARCHAR(%(username_length)s) NOT NULL,
+            username VARCHAR(%(username_length)s) UNIQUE NOT NULL,
             password VARCHAR(%(password_length)s) NOT NULL,
             role user_role NOT NULL DEFAULT 'user',
             created_at TIMESTAMPTZ DEFAULT now(),
@@ -203,7 +203,8 @@ def init_db():
         );
 
         INSERT INTO users (username, password, role, credits)
-        VALUES ('admin', '$2b$12$VEUlGiag6gJv.S6i51/i3Ov00lICVZsK37xVwA/1wC5KBVvJItgUK', 'admin', 0);
+        VALUES ('admin', '$2b$12$VEUlGiag6gJv.S6i51/i3Ov00lICVZsK37xVwA/1wC5KBVvJItgUK', 'admin', 0)
+        ON CONFLICT (username) DO NOTHING;
         """, {
             'username_length': USER_COLUMN_LENGTHS['username'][1],
             'password_length': USER_COLUMN_LENGTHS['password'][1],
