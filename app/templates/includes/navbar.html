@@ -10,7 +10,15 @@
     position: relative;
     flex-wrap: wrap;
 ">
-    {% set role = session.get('role', 'guest') or data.role or 'guest' %}
+    {% set role = session.get('role', 'guest') %}
+
+    <div style="position: absolute; left: 20px; margin: 0;">
+        <p>
+            {% if role -%}{{ role|capitalize }}{% endif -%}
+            {% if session.get('username') -%}: {{ session.get('username') }} {% endif -%}
+            {% if session.get('credits') is not none -%}Credits: {{ session.get('credits') }}{% endif %}
+        </p>
+    </div>
 
     <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: center;">
         {% if role == 'admin' %}
@@ -41,7 +49,7 @@
 
     {% if role in [ 'admin', 'consultant', 'user'] %}
         <form action="{{ url_for('logout.logout') }}" method="POST" style="position: absolute; right: 20px; margin: 0;">
-            <button type="submit" class="action-button cancel-button">Logout</button> </button>
+            <button type="submit" class="action-button cancel-button">Logout</button>
         </form>
     {% endif %}
 </nav>

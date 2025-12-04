@@ -272,3 +272,13 @@ def remove_credits(user_id, amount):
     except Exception as e:
         print(f"Unknown error in remove_credits(): {e}")
         return "Unknown error while removing credits."
+
+def get_credits(username):
+    try:
+        credits = get_one("SELECT credits FROM users WHERE username = %s", (username,))
+        if credits:
+            return credits['credits']
+        return "No such user."
+    except Exception as e:
+        print(f"Error occurred while fetching user credits: {e}")
+        return "Error occurred while fetching user credits."

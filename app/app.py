@@ -1,6 +1,7 @@
 # app.py
 from flask import Flask, redirect, url_for, session, flash
 from models.db import init_db
+from models.users import get_credits
 from controllers.faq import faq_bp
 from controllers.chat import chat_bp
 from controllers.login import login_bp
@@ -30,6 +31,8 @@ app.register_blueprint(register_consultant_bp)
 def ensure_default_session():
     if 'role' not in session:
         session['role'] = 'guest'
+    if session['role'] == 'user':
+        session['credits'] = get_credits(session['username'])
 
 @app.route('/')
 def index():
