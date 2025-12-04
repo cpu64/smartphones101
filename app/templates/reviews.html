@@ -44,16 +44,23 @@
             border-radius: var(--border-radius);
             margin-bottom: 30px;
         ">
-            <h2 style="margin-bottom: 10px;">
-                👤 {{ consultant }}
 
-                {% if avg %}
-                    <span style="color: gold; font-size: 0.9rem;">
-                        ★ {{ avg }}
-                    </span>
-                {% endif %}
-            </h2>
+        <input type="checkbox"
+               class="css-toggle-switch"
+               id="consultant-{{ loop.index }}">
 
+        <label for="consultant-{{ loop.index }}"
+               style="font-weight: bold; font-size: 20px; cursor: pointer; display: block;">
+            👤 {{ consultant }}
+
+            {% if avg %}
+                <span style="color: gold; font-size: 0.9rem; margin-left: 6px;">
+                    ★ {{ avg }} ({{ reviews|length }} review{{ 's' if reviews|length != 1 else '' }})
+                </span>
+            {% endif %}
+        </label>
+
+        <div class="css-toggle-content" style="margin-top: 18px;">
             <hr style="margin-bottom: 20px;">
 
             {% for review in reviews %}
@@ -89,8 +96,10 @@
                 </div>
             {% endfor %}
         </div>
+    </div>
 
     {% endfor %}
+
 {% else %}
     <p style="text-align: center;">No reviews available yet.</p>
 {% endif %}
