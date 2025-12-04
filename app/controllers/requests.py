@@ -1,6 +1,6 @@
 # controllers/requests.py
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
-from models.requests import get_requests, create_request, delete_request
+from models.requests import get_requests, create_request, delete_request, approve_all
 from models.users import add_credits
 
 requests_bp = Blueprint('requests', __name__)
@@ -54,6 +54,19 @@ def requests():
                 flash(err, "error")
             else:
                 flash("Request submitted successfully.", "success")
+
+            return redirect(url_for('requests.requests'))
+
+        if action == "approve-all":
+            if role != "admin":
+                flash("Only admins can approve requests.", "error")
+                return redirect(url_for('requests.requests'))
+
+            err = approve_all()
+            if err:
+                flash(err, "error")
+            else:
+                flash("Requests approved and credits added.", "success")
 
             return redirect(url_for('requests.requests'))
 
