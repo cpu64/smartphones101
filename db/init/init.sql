@@ -15,6 +15,7 @@ $$;
 CREATE TABLE IF NOT EXISTS users (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     username VARCHAR(30) UNIQUE NOT NULL,
+    email VARCHAR(60) UNIQUE NOT NULL,
     password VARCHAR(60) NOT NULL,
     role user_role NOT NULL DEFAULT 'user',
     created_at TIMESTAMPTZ DEFAULT now(),
@@ -101,12 +102,12 @@ CREATE TABLE IF NOT EXISTS faqs (
     created_at TIMESTAMPTZ DEFAULT now()
 );
 
-INSERT INTO users (username, password, role, credits)
+INSERT INTO users (username, email, password, role, credits)
 VALUES
-    ('admin', '$2b$12$VEUlGiag6gJv.S6i51/i3Ov00lICVZsK37xVwA/1wC5KBVvJItgUK', 'admin', 0),
-    ('aaa',   '$2b$12$o9GVcvT8VfmBN6BA.PVWb.zudArlfr5T6AL2V03uAYLKXmr/ez6aS', 'user', 2000),
-    ('bbb',   '$2b$12$gZWy1JhHy.SaMjVBlgs0zOz2AT.h8AI8ekaYyVlu1OVGZ.j28ZMA2', 'consultant', 0),
-    ('ggg',   '$2b$12$gZWy1JhHy.SaMjVBlgs0zOz2AT.h8AI8ekaYyVlu1OVGZ.j28ZMA2', 'consultant', 0);
+    ('admin', 'admin@t.com', '$2b$12$VEUlGiag6gJv.S6i51/i3Ov00lICVZsK37xVwA/1wC5KBVvJItgUK', 'admin', 0),
+    ('aaa', 'aaa@t.com', '$2b$12$o9GVcvT8VfmBN6BA.PVWb.zudArlfr5T6AL2V03uAYLKXmr/ez6aS', 'user', 2000),
+    ('bbb', 'bbb@t.com', '$2b$12$gZWy1JhHy.SaMjVBlgs0zOz2AT.h8AI8ekaYyVlu1OVGZ.j28ZMA2', 'consultant', 0),
+    ('ggg', 'ggg@t.com', '$2b$12$gZWy1JhHy.SaMjVBlgs0zOz2AT.h8AI8ekaYyVlu1OVGZ.j28ZMA2', 'consultant', 0);
 
 INSERT INTO requests (user_id, amount)
 VALUES (2, 50);

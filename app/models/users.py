@@ -23,14 +23,25 @@ def get_credentials(username):
         print(f"Error occurred while fetching user credentials: {e}")
         return "Error occurred while fetching user credentials."
 
-def register_user(username, hashed_password, role='user'):
+def get_users():
     try:
+        data = get_all("SELECT id, username, email, password, role FROM users ORDER BY id ASC")
+        if data:
+            return data
+        return "No users."
+    except Exception as e:
+        print(f"Error occurred while fetching users: {e}")
+        return "Error occurred while fetching users."
+
+def register_user(username, hashed_password, email, role='user'):
+    try:
+        print(username, hashed_password, email)
         execute("""
-            INSERT INTO users (username, password, role)
-            VALUES (%s, %s, %s)
-        """, (username, hashed_password, role))
+            INSERT INTO users (username, password, email, role)
+            VALUES (%s, %s, %s, %s)
+        """, (username, hashed_password, email, role))
     except psycopg2.errors.UniqueViolation:
-        return "Username already exists."
+        return "Username or email already exists."
 
     except psycopg2.errors.StringDataRightTruncation:
         return "Invalid input length. Please check your username and password."

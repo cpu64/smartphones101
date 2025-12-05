@@ -3,6 +3,7 @@ from flask import Flask, redirect, url_for, session, flash
 from models.db import init_db
 from models.users import get_credits
 from controllers.faq import faq_bp
+from controllers.view_users import view_users_bp
 from controllers.chat import chat_bp
 from controllers.login import login_bp
 from controllers.logout import logout_bp
@@ -18,6 +19,7 @@ app = Flask(__name__)
 app.secret_key = secrets.token_hex(32)
 
 app.register_blueprint(faq_bp)
+app.register_blueprint(view_users_bp)
 app.register_blueprint(chat_bp)
 app.register_blueprint(login_bp)
 app.register_blueprint(logout_bp)

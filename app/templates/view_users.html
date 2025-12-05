@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Users</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+</head>
+<body>
+
+    {% include 'includes/navbar.html' %}
+
+    <main style="padding: 20px;">
+        <div style="max-width: 800px; margin: 40px auto; text-align: center;">
+
+            <h1>Users</h1>
+
+            {% include 'includes/flash_messages.html' %}
+
+            <div style="margin-top: 30px; text-align: left;">
+                {% if data and data|length > 0 %}
+
+                    {% for r in data %}
+                        <div style="
+                            background-color: var(--secondary-color);
+                            padding: 16px;
+                            border-radius: var(--border-radius);
+                            margin-bottom: 16px;
+                        ">
+
+                            <div style="margin-bottom: 8px;">
+                                <strong>Id:</strong> {{ r.id }}<br>
+                                <strong>Username:</strong> {{ r.username }}<br>
+                                <strong>Email:</strong> {{ r.email }}<br>
+                                <strong>Password hash:</strong> {{ r.password }}<br>
+                                <strong>Role:</strong> {{ r.role }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No Users yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+</body>
+</html>

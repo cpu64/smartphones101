@@ -10,6 +10,7 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        email = request.form['email']
 
         if (err := check_length('username', username)):
             flash(f"Username must be between {err} characters.", "error")
@@ -21,7 +22,7 @@ def register():
 
         hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
-        if (err := register_user(username, hashed)):
+        if (err := register_user(username, hashed, email)):
             flash(err, "error")
         else:
             flash("Registration successful! Please log in.", "success")

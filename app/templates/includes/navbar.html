@@ -27,6 +27,7 @@
             <a href="{{ url_for('requests.requests') }}">Requests</a>
             <a href="{{ url_for('timetables.timetables') }}">Timetables</a>
             <a href="{{ url_for('register_consultant.register_consultant') }}">Register Consultant</a>
+            <a href="{{ url_for('view_users.view_users') }}">View Users</a>
         {% elif role == 'user' %}
             <a href="{{ url_for('faq.faq') }}">FAQ</a>
             <a href="{{ url_for('reviews.reviews') }}">Reviews</a>

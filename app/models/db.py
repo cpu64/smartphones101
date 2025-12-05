@@ -116,6 +116,7 @@ def init_db():
         CREATE TABLE IF NOT EXISTS users (
             id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
             username VARCHAR(%(username_length)s) UNIQUE NOT NULL,
+            email VARCHAR(30) UNIQUE NOT NULL,
             password VARCHAR(%(password_length)s) NOT NULL,
             role user_role NOT NULL DEFAULT 'user',
             created_at TIMESTAMPTZ DEFAULT now(),
@@ -202,8 +203,8 @@ def init_db():
             created_at TIMESTAMPTZ DEFAULT now()
         );
 
-        INSERT INTO users (username, password, role, credits)
-        VALUES ('admin', '$2b$12$VEUlGiag6gJv.S6i51/i3Ov00lICVZsK37xVwA/1wC5KBVvJItgUK', 'admin', 0)
+        INSERT INTO users (username, email, password, role, credits)
+        VALUES ('admin', 'admin@t.com', '$2b$12$VEUlGiag6gJv.S6i51/i3Ov00lICVZsK37xVwA/1wC5KBVvJItgUK', 'admin', 0)
         ON CONFLICT (username) DO NOTHING;
         """, {
             'username_length': USER_COLUMN_LENGTHS['username'][1],
