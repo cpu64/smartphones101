@@ -9,3 +9,4 @@
 ./db/init/
 ./db/data/
 ./db/logs/
+./exclude
